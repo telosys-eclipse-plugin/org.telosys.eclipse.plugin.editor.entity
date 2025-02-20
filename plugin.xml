@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension point="org.eclipse.ui.editors">
+       <editor
+            id=   "org.telosys.eclipse.plugin.editor.entity"
+            class="org.telosys.eclipse.plugin.editor.entity.EntityEditor"
+            name="Telosys entity file editor"
+            icon="icons/entity_16pix.png"
+            extensions="entity"
+            />
+       <!--
+       class : the root Java class for the editor (class extending TextEditor)
+       -->
+   </extension>
+
+</plugin>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Entity editor
+Bundle-SymbolicName: org.telosys.eclipse.plugin.editor.entity;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.telosys.eclipse.plugin.editor.entity.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.editors;bundle-version="3.13.400",
+ org.eclipse.jface.text;bundle-version="3.16.500"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: org.telosys.eclipse.plugin.editor.entity
+Bundle-ActivationPolicy: lazy
