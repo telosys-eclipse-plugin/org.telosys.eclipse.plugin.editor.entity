@@ -43,7 +43,10 @@ public class EntityScanner extends RuleBasedScanner {
         
         rulesList.add( TagRule.build(new Token(TAG)) );
         rulesList.add( AttributeTypeRule.build(new Token(NEUTRAL_TYPE)) );
+
+        //        rulesList.add( HeaderAnnotationRuleBuilder.build(new Token(ANNOTATION)) );
         rulesList.add( AnnotationRule.build(new Token(ANNOTATION)) );
+        
         rulesList.add( KeywordRule.build(new Token(KEYWORD)) );
         
         setRules(rulesList.toArray( new IRule[0]));
