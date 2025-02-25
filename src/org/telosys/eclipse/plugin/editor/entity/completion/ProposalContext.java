@@ -53,7 +53,7 @@ public class ProposalContext {
 		if ( word.startsWith("@") ) {
 			if ( afterColon && afterOpenBrace ) {
 				// foo : int { @Def 
-				return ProposalType.ATTRIBUTE_ANNOTATION ;
+				return ProposalType.FIELD_ANNOTATION ;
 			} else {
 				if ( afterColon == false && afterOpenBrace == false) {
 					// nothing found ( no ':' and no '{' )
@@ -63,7 +63,7 @@ public class ProposalContext {
 		} else {
 			if ( afterColon && ! afterOpenBrace ) {
 				// foo : str
-				return ProposalType.ATTRIBUTE_TYPE ;
+				return ProposalType.FIELD_TYPE ;
 			}
 		}
 		return ProposalType.DEFAULT;

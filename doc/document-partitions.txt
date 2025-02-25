@@ -1,0 +1,67 @@
+Document partitioning
+--------------------- 
+
+1.1) Create a "Partition Scanner" to split the document (file) in 2 parts (header and body)
+Example: 
+  public class HeaderBodyPartitionScanner extends RuleBasedPartitionScanner 
+
+1.2) Register the Partition Scanner
+  String[] partitionTypes = new String[] { HeaderBodyPartitionScanner.HEADER, HeaderBodyPartitionScanner.BODY };
+  DocumentPartitioner partitioner = new FastPartitioner(new HeaderBodyPartitionScanner(), partitionTypes);
+  document.setDocumentPartitioner(partitioner);
+  partitioner.connect(document);
+
+----------------------------------------------------------------------------------------------
+
+Syntax coloration
+----------------- 
+
+Each partition has its own scanner, each scanner has its own set of rules 
+
+2.1) Define separate syntax scanners for "HEADER" and "BODY" partitions.
+(each scanner has its own set of rules )
+
+
+2.2) Assign Scanners to Partitions using "IPresentationReconciler "
+in class xxx extends SourceViewerConfiguration
+    @Override
+    public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+        PresentationReconciler reconciler = new PresentationReconciler();
+
+        // Configure syntax coloring for HEADER partition
+        DefaultDamagerRepairer headerRepairer = new DefaultDamagerRepairer(headerScanner);
+        reconciler.setDamager(headerRepairer, HeaderBodyPartitionScanner.HEADER);
+        reconciler.setRepairer(headerRepairer, HeaderBodyPartitionScanner.HEADER);
+
+        // Configure syntax coloring for BODY partition
+        DefaultDamagerRepairer bodyRepairer = new DefaultDamagerRepairer(bodyScanner);
+        reconciler.setDamager(bodyRepairer, HeaderBodyPartitionScanner.BODY);
+        reconciler.setRepairer(bodyRepairer, HeaderBodyPartitionScanner.BODY);
+
+        return reconciler;
+
+----------------------------------------------------------------------------------------------
+
+Content assist (completion)
+---------------------------
+
+Each partition has its own ContentAssistant processor 
+
+3.1) Implement Different Content Assist Processors
+class xxx  implements IContentAssistProcessor
+
+3.2) Assign Content Assist Processors using "ContentAssistant" 
+in class xxx extends SourceViewerConfiguration
+    @Override
+    public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+        ContentAssistant assistant = new ContentAssistant();
+
+        // Assign the correct processor for each partition
+        assistant.setContentAssistProcessor(headerProcessor, HeaderBodyPartitionScanner.HEADER);
+        assistant.setContentAssistProcessor(bodyProcessor, HeaderBodyPartitionScanner.BODY);
+
+        assistant.enableAutoActivation(true);
+        assistant.setAutoActivationDelay(500);
+
+        return assistant;
+    }

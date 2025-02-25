@@ -37,10 +37,10 @@ public class ProposalsManager {
     	case ENTITY_ANNOTATION : 
     		// For future use
     		return null;
-    	case ATTRIBUTE_ANNOTATION : // @Id, @DefaultValue(xx), etc
+    	case FIELD_ANNOTATION : // @Id, @DefaultValue(xx), etc
     		suggestions = SuggestionsForAttributeAnnotation.getSuggestions(ctx.getWord());
     		break;
-    	case ATTRIBUTE_TYPE : // int, string, Employee, etc
+    	case FIELD_TYPE : // int, string, Employee, etc
     		suggestions = SuggestionsForAttributeType.getSuggestions(ctx.getWord());
     		break;
     	default :

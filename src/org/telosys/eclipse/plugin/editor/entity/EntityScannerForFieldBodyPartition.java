@@ -15,7 +15,7 @@ import org.telosys.eclipse.plugin.editor.entity.rules.LiteralStringRule;
 import org.telosys.eclipse.plugin.editor.entity.rules.NeutralTypeRule;
 import org.telosys.eclipse.plugin.editor.entity.rules.TagRule;
 
-public class EntityScanner extends RuleBasedScanner {
+public class EntityScannerForFieldBodyPartition extends RuleBasedScanner {
 	
 	private static final Color RED      = new org.eclipse.swt.graphics.Color(null, 255,   0,   0) ; 
 	private static final Color OLIVE    = new org.eclipse.swt.graphics.Color(null, 128, 128,   0) ; 
@@ -34,19 +34,19 @@ public class EntityScanner extends RuleBasedScanner {
 	private static final TextAttribute ANNOTATION_PARAM       = new TextAttribute(BLUE);
 	private static final TextAttribute TAG           = new TextAttribute(RED);
 	
-    public EntityScanner() {
+    public EntityScannerForFieldBodyPartition() {
         // rules are evaluated in sequence until one is successful
         List<IRule> rulesList = new ArrayList<>();
         
+        // Keep COMMENT and LITERAL (for embedded in "BODY" )
         rulesList.add( CommentRule.build(new Token(COMMENT)));
         rulesList.add( LiteralStringRule.build(new Token(LITERAL_STRING)));
         
         rulesList.add( TagRule.build(new Token(TAG)) );
         rulesList.add( NeutralTypeRule.build(new Token(NEUTRAL_TYPE)) );
 
-        //        rulesList.add( HeaderAnnotationRuleBuilder.build(new Token(ANNOTATION)) );
+//        //        rulesList.add( HeaderAnnotationRuleBuilder.build(new Token(ANNOTATION)) );
         rulesList.add( AnnotationBodyRule.build(new Token(ANNOTATION)) );
-        
         rulesList.add( AnnotationParameterRule.build(new Token(ANNOTATION_PARAM)) );
         
         setRules(rulesList.toArray( new IRule[0]));

@@ -1,7 +1,11 @@
 package org.telosys.eclipse.plugin.editor.entity;
 
+import java.util.logging.Level;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.telosys.eclipse.plugin.commons.CustomRootLogger;
+import org.telosys.eclipse.plugin.commons.EclipseConsoleAsLoggerHandler;
 
 /**
  * Plugin activator class (it controls the plug-in life cycle)
@@ -27,6 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		CustomRootLogger.setup(PLUGIN_ID, Level.ALL, new EclipseConsoleAsLoggerHandler("Telosys logger: entity editor") );	
 	}
 
 	@Override
