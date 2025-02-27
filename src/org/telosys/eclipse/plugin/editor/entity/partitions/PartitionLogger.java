@@ -31,7 +31,7 @@ public class PartitionLogger {
             	LOGGER.fine("-----------------------------");
             }
         } catch (BadLocationException e) {
-            e.printStackTrace();
+        	LOGGER.fine("ERROR: BadLocationException: " + e.getMessage() );
         }
     }
 }

@@ -76,6 +76,9 @@ public class Annotations {
 		};
 	private static final String[] link_annotations_without_parentheses = removeParentheses(link_annotations);
 	
+
+	private static final String[] field_annotations = WordsUtil.mergeArrays(attribute_annotations, link_annotations);
+	
 	private static String[] removeParentheses(String[] annotations) {
         return Arrays.stream(annotations)
                      .map(annotation -> annotation.replaceAll("\\(\\)$", ""))
@@ -101,5 +104,9 @@ public class Annotations {
 	}
 	public static String[] getLinkAnnotationsWithoutParentheses() {
 		return link_annotations_without_parentheses;
+	}
+
+	public static String[] getFieldAnnotations() {
+		return field_annotations;
 	}
 }

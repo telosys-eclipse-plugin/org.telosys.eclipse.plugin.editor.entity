@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.completion;
+package org.telosys.eclipse.plugin.editor.entity.completion.bak;
 
 
 public class ProposalContext {

@@ -1,7 +1,9 @@
 package org.telosys.eclipse.plugin.editor.entity.syntax;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class WordsUtil {
 	
@@ -21,4 +23,13 @@ public class WordsUtil {
 
         return result.toString();
     }
+    
+    public static String[] mergeArrays(String[] array1, String[] array2 ) {
+        // Merge, remove duplicates, sort alphabetically
+        return Stream.concat(Arrays.stream(array1), Arrays.stream(array2))
+                     .distinct() // Removes duplicates
+                     .sorted()   // Sorts alphabetically
+                     .toArray(String[]::new);
+    }
+
 }

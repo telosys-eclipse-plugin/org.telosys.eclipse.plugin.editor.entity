@@ -1,8 +1,6 @@
 package org.telosys.eclipse.plugin.editor.entity;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.telosys.eclipse.plugin.editor.entity.partitions.EntityDocumentProvider;
 
@@ -23,7 +21,18 @@ public class EntityEditor extends TextEditor {
 
 	}
 	
-	
+	@Override
+	public void createPartControl(org.eclipse.swt.widgets.Composite parent) {
+	    super.createPartControl(parent);
+	    
+	    // Get the StyledText widget
+	    StyledText textWidget = getSourceViewer().getTextWidget();
+	    
+	    // Add the auto-closing character listener
+	    // TODO
+	    textWidget.addVerifyKeyListener(new AutoCloseCharacterListener());
+	}
+
 //    @Override
 //    protected void initializeEditor() {
 //        super.initializeEditor();

@@ -1,0 +1,21 @@
+
+An Entity document can contains N types of partitions :
+ - COMMENT    : // comment
+ - LITERAL    : "string literal"
+ - FIELD BODY : multiline part form ":" to ";" 
+ - default    : all other parts 
+
+Partitions are managed in EntityDocumentProvider by :
+  FastPartitioner (Eclipse) using EntityPartitionScanner (project) 
+    EntityPartitionScanner uses : 
+     (REMOVED) - EndOfLineRule ("//",        commentToken ) 
+     (REMOVED) - SingleLineRule("\"", "\"",  literalToken, '\\' )
+     - MultiLineRule (":",  ";",   bodyToken )
+   
+NB: In Eclipse plugin development using the FastPartitioner for a text editor, nested partitions are not directly supported. 
+The FastPartitioner assumes a flat partitioning model, meaning partitions cannot overlap or nest within each other.
+
+//comment and "literal" between ":" and ";" are not partitions, they are part of BODY partition 
+
+
+
