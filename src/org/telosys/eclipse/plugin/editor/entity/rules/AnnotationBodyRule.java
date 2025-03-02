@@ -36,15 +36,9 @@ public class AnnotationBodyRule {
 		// Rule creation
 		WordRule wordRule = new WordRule(wordDetector);
 		// Add all acceptable words
-////        for (String word : entity_annotations) {
-//		for (String word : Annotations.getEntityAnnotationsWithoutParentheses()) {
-//			wordRule.addWord(word, token);
-//		}
-//        for (String word : attribute_annotations) {
 		for (String word : Annotations.getAttributeAnnotationsWithoutParentheses()) {
 			wordRule.addWord(word, token);
 		}
-//        for (String word : link_annotations) {
 		for (String word : Annotations.getLinkAnnotationsWithoutParentheses()) {
 			wordRule.addWord(word, token);
 		}

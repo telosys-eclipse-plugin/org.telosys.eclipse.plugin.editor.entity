@@ -1,5 +1,7 @@
 package org.telosys.eclipse.plugin.editor.entity;
 
+import java.io.File;
+
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -14,6 +16,18 @@ import org.telosys.eclipse.plugin.editor.entity.partitions.EntityPartitionTypes;
 
 public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 	
+	private final File file ;
+//    private final EntityScannerForDefaultPartition   defaultPartitionScanner   ; //= new EntityScannerForDefaultPartition();
+//    private final EntityScannerForFieldBodyPartition fieldBodyPartitionScanner ; //= new EntityScannerForFieldBodyPartition();
+	
+	public EntitySourceViewerConfiguration(File file) {
+		super();
+		this.file = file; // can be null if error in caller (not supposed to happen)
+//		this.defaultPartitionScanner   = new EntityScannerForDefaultPartition();
+//		this.fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
+	}
+
+
 //    private IContentAssistProcessor contentAssistProcessor;
 //    
 //    public EntitySourceViewerConfiguration() {
@@ -37,8 +51,6 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 //        return reconciler;
 //    }
 	
-    private final EntityScannerForDefaultPartition   defaultPartitionScanner   = new EntityScannerForDefaultPartition();
-    private final EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
    
     // Returns all configured content types for the given source viewer. 
     // This list tells the caller which content types must be configured for the given sourceviewer, 
@@ -65,11 +77,14 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 //        reconciler.setRepairer(literalRepairer, EntityPartitionTypes.LITERAL);
 
         // Configure syntax highlighting for DEFAULT partition
+        EntityScannerForDefaultPartition defaultPartitionScanner   = new EntityScannerForDefaultPartition();
         DefaultDamagerRepairer defaultRepairer = new DefaultDamagerRepairer(defaultPartitionScanner);
         reconciler.setDamager(defaultRepairer,  IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(defaultRepairer, IDocument.DEFAULT_CONTENT_TYPE);
 
         // Configure syntax highlighting for FIELD_BODY partition
+        // TODO: File
+        EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
         DefaultDamagerRepairer bodyRepairer = new DefaultDamagerRepairer(fieldBodyPartitionScanner);
         reconciler.setDamager(bodyRepairer,  EntityPartitionTypes.FIELD_BODY);
         reconciler.setRepairer(bodyRepairer, EntityPartitionTypes.FIELD_BODY);

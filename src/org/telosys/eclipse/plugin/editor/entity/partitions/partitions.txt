@@ -1,7 +1,7 @@
 
 An Entity document can contains N types of partitions :
- - COMMENT    : // comment
- - LITERAL    : "string literal"
+ (REMOVED) - COMMENT    : // comment
+ (REMOVED) - LITERAL    : "string literal"
  - FIELD BODY : multiline part form ":" to ";" 
  - default    : all other parts 
 
