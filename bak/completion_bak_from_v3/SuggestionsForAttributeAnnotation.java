@@ -3,8 +3,6 @@ package org.telosys.eclipse.plugin.editor.entity.completion.bak;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.telosys.eclipse.plugin.editor.entity.EntityEditorUtil;
-
 public class SuggestionsForAttributeAnnotation {
 
     /**

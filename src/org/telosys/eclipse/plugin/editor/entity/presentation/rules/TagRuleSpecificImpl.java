@@ -1,16 +1,13 @@
-package org.telosys.eclipse.plugin.editor.entity.rules;
-
-import java.util.logging.Logger;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.Token;
-import org.telosys.eclipse.plugin.editor.entity.completion.bak.ProposalsManager;
 
 public class TagRuleSpecificImpl implements IRule {
 	
-	private static final Logger LOGGER = Logger.getLogger(TagRuleSpecificImpl.class.getName());
+	// private static final Logger LOGGER = Logger.getLogger(TagRuleSpecificImpl.class.getName());
 
     private final IToken token;
 

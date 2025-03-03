@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity;
+package org.telosys.eclipse.plugin.editor.entity.presentation.scanners;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.SWT;
@@ -45,6 +45,9 @@ public class TextualAttribute {
 
 	public static final TextAttribute NEUTRAL_TYPE      = new TextAttribute(DARK_PURPLE, null, SWT.BOLD); // Eclipse like
 //	public static final TextAttribute NEUTRAL_TYPE      = new TextAttribute(DARK_MAGENTA, null, SWT.BOLD); 
+	
+	public static final TextAttribute CURRENT_ENTITY    = new TextAttribute(PURPLE, null, SWT.BOLD); 
+	
 	
 	public static final TextAttribute ANNOTATION        = new TextAttribute(DARK_RED);
 	public static final TextAttribute ANNOTATION_PARAM  = new TextAttribute(DARK_BLUE); // Eclipse like

@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.rules;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IRule;

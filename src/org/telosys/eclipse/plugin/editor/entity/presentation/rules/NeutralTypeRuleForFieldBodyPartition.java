@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.rules;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules;
 
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
@@ -6,7 +6,7 @@ import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.WordRule;
 import org.telosys.eclipse.plugin.editor.entity.syntax.NeutralTypes;
 
-public class NeutralTypeRule {
+public class NeutralTypeRuleForFieldBodyPartition {
 
 	private static final String words[]         = NeutralTypes.getWords();
 	private static final String firstCharacters = NeutralTypes.getFirstCharacters();

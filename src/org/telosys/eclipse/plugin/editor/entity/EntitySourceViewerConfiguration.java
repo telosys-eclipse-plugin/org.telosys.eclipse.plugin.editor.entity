@@ -13,20 +13,26 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.telosys.eclipse.plugin.editor.entity.completion.EntityContentAssistForDefaultPartition;
 import org.telosys.eclipse.plugin.editor.entity.completion.EntityContentAssistForFieldBodyPartition;
 import org.telosys.eclipse.plugin.editor.entity.partitions.EntityPartitionTypes;
+import org.telosys.eclipse.plugin.editor.entity.presentation.scanners.EntityScannerForDefaultPartition;
+import org.telosys.eclipse.plugin.editor.entity.presentation.scanners.EntityScannerForFieldBodyPartition;
+import org.telosys.eclipse.plugin.editor.entity.syntax.EntityNames;
 
 public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 	
-	private final File file ;
+	private final File   entityFile ;
+	private final File   modelFolder ;
+	private final String currentEntityName ;
 //    private final EntityScannerForDefaultPartition   defaultPartitionScanner   ; //= new EntityScannerForDefaultPartition();
 //    private final EntityScannerForFieldBodyPartition fieldBodyPartitionScanner ; //= new EntityScannerForFieldBodyPartition();
 	
 	public EntitySourceViewerConfiguration(File file) {
 		super();
-		this.file = file; // can be null if error in caller (not supposed to happen)
+		this.entityFile = file; // can be null if error in caller (not supposed to happen)
+		this.currentEntityName = EntityNames.getEntityName(file);
+		this.modelFolder = file.getParentFile();
 //		this.defaultPartitionScanner   = new EntityScannerForDefaultPartition();
 //		this.fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
-	}
-
+	} 
 
 //    private IContentAssistProcessor contentAssistProcessor;
 //    
@@ -77,14 +83,14 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 //        reconciler.setRepairer(literalRepairer, EntityPartitionTypes.LITERAL);
 
         // Configure syntax highlighting for DEFAULT partition
-        EntityScannerForDefaultPartition defaultPartitionScanner   = new EntityScannerForDefaultPartition();
+        EntityScannerForDefaultPartition defaultPartitionScanner   = new EntityScannerForDefaultPartition(currentEntityName);
         DefaultDamagerRepairer defaultRepairer = new DefaultDamagerRepairer(defaultPartitionScanner);
         reconciler.setDamager(defaultRepairer,  IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(defaultRepairer, IDocument.DEFAULT_CONTENT_TYPE);
 
         // Configure syntax highlighting for FIELD_BODY partition
         // TODO: File
-        EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
+        EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition(modelFolder);
         DefaultDamagerRepairer bodyRepairer = new DefaultDamagerRepairer(fieldBodyPartitionScanner);
         reconciler.setDamager(bodyRepairer,  EntityPartitionTypes.FIELD_BODY);
         reconciler.setRepairer(bodyRepairer, EntityPartitionTypes.FIELD_BODY);

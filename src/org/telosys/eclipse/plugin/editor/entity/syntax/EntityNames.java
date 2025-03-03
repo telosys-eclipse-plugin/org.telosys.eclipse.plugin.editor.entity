@@ -5,6 +5,8 @@ import java.io.FilenameFilter;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.telosys.eclipse.plugin.commons.TelosysPluginException;
+
 public class EntityNames {
 	
 	public static final String ENTITY  = ".entity" ;
@@ -20,16 +22,31 @@ public class EntityNames {
     
 	public static Set<String> getEntities(File modelFolder) {
 		TreeSet<String> entities = new TreeSet<>(); // TreeSet to keep sorted order
-        for ( String str : modelFolder.list(filenameFilter) ) {
-        	int lastIndex = str.lastIndexOf('.');
-        	if ( lastIndex > 0 ) { // a least 1 char expected before extension 
-            	// remove extension suffix ( "Foo.entity" --> "Foo" ) and keep in list
-        		entities.add( str.substring(0, lastIndex) );
-        	}
-        }
+		if ( modelFolder != null ) {
+	        for ( String str : modelFolder.list(filenameFilter) ) {
+	    		entities.add( removeFileExtension(str) );
+	        }
+		}
         return entities;
 	}
 	
+	public static String getEntityName(File file) {
+		if ( file != null ) {
+			return removeFileExtension( file.getName() );
+		}
+		else {
+			throw new TelosysPluginException("Invalid file parameter (null)" );
+		}
+	}
+	
+	public static String removeFileExtension(String str) {
+    	int lastIndex = str.lastIndexOf('.');
+    	if ( lastIndex > 0 ) { // a least 1 char expected before extension 
+        	// remove extension suffix ( "Foo.entity" --> "Foo" ) and keep in list
+    		return str.substring(0, lastIndex) ;
+    	}
+    	return str;
+	}
 	/*
 	public static void main(String[] args) {
 		File modelFolder = new File("D:/Z/TELOSYS-TESTS/telosys-test1/TelosysTools/models/orders");

@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.rules;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules;
 
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
@@ -6,7 +6,7 @@ import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.WordRule;
 import org.telosys.eclipse.plugin.editor.entity.syntax.AnnotationParameters;
 
-public class AnnotationParameterRule {
+public class AnnotationParameterRuleForFieldBodyPartition {
 
 	private static final String words[] = AnnotationParameters.getWords();
 	private static final String firstCharacters = AnnotationParameters.getFirstCharacters();

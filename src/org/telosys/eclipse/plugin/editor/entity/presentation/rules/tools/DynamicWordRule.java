@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.rules.tools;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules.tools;
 
 import java.util.Set;
 
@@ -10,33 +10,29 @@ import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.Token;
 
 /**
- * This class is an adaptation of the original Eclipse "WordRule" 
+ * This class is an adaptation of the original Eclipse "WordRule". 
+ * It uses a "WordProvider" to get a dynamic list of words
  */
 public class DynamicWordRule implements IRule {
 
-	/** Internal setting for the un-initialized column constraint. */
-	protected static final int UNDEFINED= -1;
+//	/** Internal setting for the un-initialized column constraint. */
+//	protected static final int UNDEFINED= -1;
 
 	/** The word detector used by this rule. */
 	protected IWordDetector fDetector;
 	
 	private final WordProvider wordProvider; // Added for dynamic list of words
+	
 	private final IToken token; // Token to return if word found
 	
-	/** The default token to be returned on success and if nothing else has been specified. */
-	protected IToken fDefaultToken;
-	/** The column constraint. */
-	protected int fColumn= UNDEFINED;
-//	/** The table of predefined words and token for this rule. */
-//	protected Map<String, IToken> fWords= new HashMap<>();
+//	/** The default token to be returned on success and if nothing else has been specified. */
+//	protected IToken fDefaultToken;
+
+//	/** The column constraint. */
+//	protected int fColumn= UNDEFINED;
+
 	/** Buffer used for pattern detection. */
 	private StringBuilder fBuffer= new StringBuilder();
-//	/**
-//	 * Tells whether this rule is case sensitive.
-//	 * @since 3.3
-//	 */
-//	private boolean fIgnoreCase= false;
-
 
 //	/**
 //	 * Creates a rule which, with the help of an word detector, will return the token
@@ -94,54 +90,40 @@ public class DynamicWordRule implements IRule {
 		Assert.isNotNull(wordProvider);
 		Assert.isNotNull(token);
 		this.fDetector= detector;
-		this.fDefaultToken = Token.UNDEFINED;
+//		this.fDefaultToken = Token.UNDEFINED;
 		this.wordProvider = wordProvider;
 		this.token = token;
 	}
 	
 //	/**
-//	 * This methods allows to change the words dynamically 
-//	 * @param words
-//	 */
-//	public void setWords(Map<String, IToken> words) {
-//		this.fWords = words;
-//	}
-	
-//	/**
-//	 * Adds a word and the token to be returned if it is detected.
+//	 * Sets a column constraint for this rule. If set, the rule's token
+//	 * will only be returned if the pattern is detected starting at the
+//	 * specified column. If the column is smaller then 0, the column
+//	 * constraint is considered removed.
 //	 *
-//	 * @param word the word this rule will search for, may not be <code>null</code>
-//	 * @param token the token to be returned if the word has been found, may not be <code>null</code>
+//	 * @param column the column in which the pattern starts
 //	 */
-//	public void addWord(String word, IToken token) {
-//		Assert.isNotNull(word);
-//		Assert.isNotNull(token);
-//
-//		// If case-insensitive, convert to lower case before adding to the map
-//		if (fIgnoreCase)
-//			word= word.toLowerCase();
-//		fWords.put(word, token);
+//	public void setColumnConstraint(int column) {
+//		if (column < 0)
+//			column= UNDEFINED;
+//		fColumn= column;
 //	}
 
-	/**
-	 * Sets a column constraint for this rule. If set, the rule's token
-	 * will only be returned if the pattern is detected starting at the
-	 * specified column. If the column is smaller then 0, the column
-	 * constraint is considered removed.
-	 *
-	 * @param column the column in which the pattern starts
-	 */
-	public void setColumnConstraint(int column) {
-		if (column < 0)
-			column= UNDEFINED;
-		fColumn= column;
+	private char getPreviousChar(ICharacterScanner scanner) { // Added LGU
+	    scanner.unread();  // Move back to the previous character
+	    int prevChar = scanner.read();  // Read the previous character
+	    // Return the previous character
+	    return prevChar != ICharacterScanner.EOF ? (char) prevChar : '\0';  
 	}
-
+	
 	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
+		if ( fDetector.isWordPart(getPreviousChar(scanner)) ) {
+			return Token.UNDEFINED;
+		}
 		int c= scanner.read();
 		if (c != ICharacterScanner.EOF && fDetector.isWordStart((char) c)) {
-			if (fColumn == UNDEFINED || (fColumn == scanner.getColumn() - 1)) {
+//			if (fColumn == UNDEFINED || (fColumn == scanner.getColumn() - 1)) {
 
 				fBuffer.setLength(0);
 				do {
@@ -150,29 +132,20 @@ public class DynamicWordRule implements IRule {
 				} while (c != ICharacterScanner.EOF && fDetector.isWordPart((char) c));
 				scanner.unread();
 
-				String buffer= fBuffer.toString();
-//				// If case-insensitive, convert to lower case before accessing the map
-//				if (fIgnoreCase)
-//					buffer= buffer.toLowerCase();
-
-//				IToken token= fWords.get(buffer);
-//				// found in words list
-//				if (token != null)
-//					return token;
-				
-				//Map<String, IToken> fWords = wordProvider.getWords();
+				String buffer = fBuffer.toString();
 				Set<String> words = wordProvider.getWords();
 				if ( words.contains(buffer) ) {
+					// Known word found => return associated token 
 					return this.token;
 				}
 				
-
-				
-				if (fDefaultToken.isUndefined())
-					unreadBuffer(scanner);
-
-				return fDefaultToken;
-			}
+				// Not a known word 
+//				if (fDefaultToken.isUndefined())
+//					unreadBuffer(scanner);
+//				return fDefaultToken;
+				unreadBuffer(scanner);
+				return Token.UNDEFINED;
+//			}
 		}
 
 		scanner.unread();

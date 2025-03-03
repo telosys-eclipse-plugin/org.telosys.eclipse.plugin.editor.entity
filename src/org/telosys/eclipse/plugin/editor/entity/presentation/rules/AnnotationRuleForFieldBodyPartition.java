@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.rules;
+package org.telosys.eclipse.plugin.editor.entity.presentation.rules;
 
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
@@ -6,7 +6,7 @@ import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.WordRule;
 import org.telosys.eclipse.plugin.editor.entity.syntax.Annotations;
 
-public class AnnotationHeaderRule {
+public class AnnotationRuleForFieldBodyPartition {
 
 	/**
 	 * Word detector for annotation. </br>
@@ -36,7 +36,10 @@ public class AnnotationHeaderRule {
 		// Rule creation
 		WordRule wordRule = new WordRule(wordDetector);
 		// Add all acceptable words
-		for (String word : Annotations.getEntityAnnotationsWithoutParentheses()) {
+		for (String word : Annotations.getAttributeAnnotationsWithoutParentheses()) {
+			wordRule.addWord(word, token);
+		}
+		for (String word : Annotations.getLinkAnnotationsWithoutParentheses()) {
 			wordRule.addWord(word, token);
 		}
 		return wordRule;

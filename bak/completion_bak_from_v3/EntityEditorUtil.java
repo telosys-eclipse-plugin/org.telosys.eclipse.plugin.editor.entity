@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity;
+package org.telosys.eclipse.plugin.editor.entity.completion.bak;
 
 
 import java.util.Collections;
