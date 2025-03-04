@@ -6,35 +6,31 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.Token;
-import org.telosys.eclipse.plugin.editor.entity.syntax.WordProvider;
+import org.telosys.eclipse.plugin.editor.entity.syntax.FirstCharacters;
 
 /**
- * This class is an adaptation of the original Eclipse "WordRule". 
- * It uses a "WordProvider" to get a dynamic list of words
+ * This class is an adaptation of the original Eclipse "WordRule".
+ * Usable with a fixed list of words 
  */
-public class DynamicWordRule implements IRule {
+public class StandardWordRule implements IRule {
 
-	/** The word detector used by this rule. */
-	protected IWordDetector fDetector;
-	
-	private final WordProvider wordProvider; // Added for dynamic list of words
+	private final Set<String>     words;
+	private final FirstCharacters firstCharacters;
 	
 	private final IToken token; // Token to return if word found
 	
 	/** Buffer used for pattern detection. */
-	private StringBuilder fBuffer= new StringBuilder();
+	private StringBuilder fBuffer = new StringBuilder();
 
 	/**
 	 * Unique constructor with only the "word detector"
 	 */
-	public DynamicWordRule(IWordDetector detector, WordProvider wordProvider, IToken token) {
-		Assert.isNotNull(detector);
-		Assert.isNotNull(wordProvider);
+	public StandardWordRule(Set<String> words, IToken token) {
+		Assert.isNotNull(words);
 		Assert.isNotNull(token);
-		this.fDetector= detector;
-		this.wordProvider = wordProvider;
+		this.words = words;
+		this.firstCharacters = new FirstCharacters(words);
 		this.token = token;
 	}
 	
@@ -45,31 +41,45 @@ public class DynamicWordRule implements IRule {
 	    return prevChar != ICharacterScanner.EOF ? (char) prevChar : '\0';  
 	}
 	
+	private boolean isWordStart(char c) {
+		return firstCharacters.contains(c);
+	}
+	private boolean isWordPart(char c) {
+		// all characters usable to define a Telosys word ( "int", "@MaxLen", "#Tag", "#Tag12", "Employee" )
+        if ( Character.isLetterOrDigit(c) ) return true;
+    	if ( c == '_' ) return true;
+    	if ( c == '@' ) return true;
+    	if ( c == '#' ) return true;
+    	return false;
+	}
+	
 	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
-		if ( fDetector.isWordPart(getPreviousChar(scanner)) ) {
-			return Token.UNDEFINED;
+		if ( isWordPart(getPreviousChar(scanner)) ) {
+			return Token.UNDEFINED; // in the middle of an "unknown word" => continue scan
 		}
 		int c= scanner.read();
-		if (c != ICharacterScanner.EOF && fDetector.isWordStart((char) c)) {
+		if (c != ICharacterScanner.EOF && isWordStart((char)c)) {
 
 			fBuffer.setLength(0);
 			do {
 				fBuffer.append((char) c);
 				c= scanner.read();
-			} while (c != ICharacterScanner.EOF && fDetector.isWordPart((char) c));
+			} while (c != ICharacterScanner.EOF && isWordPart((char)c));
 			scanner.unread();
 
+			// is it a known word ?
 			String buffer = fBuffer.toString();
-			Set<String> words = wordProvider.getWords();
 			if ( words.contains(buffer) ) {
 				// Known word found => return associated token 
 				return this.token;
 			}
+			else {
+				// Not a known word 
+				unreadBuffer(scanner);
+				return Token.UNDEFINED;
+			}
 			
-			// Not a known word 
-			unreadBuffer(scanner);
-			return Token.UNDEFINED;
 		}
 
 		scanner.unread();

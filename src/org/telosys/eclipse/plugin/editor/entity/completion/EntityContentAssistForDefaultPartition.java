@@ -27,7 +27,7 @@ public class EntityContentAssistForDefaultPartition extends AbstractContentAssis
 	}
 
 	@Override
-	protected String[] getProposalsForPreviousChar(char previousChar) {
+	protected String[] getProposalsForPreviousNonBlankChar(char previousChar) {
 		// No proposals based on previous char
 		return null;
 	}

@@ -16,47 +16,20 @@ import org.telosys.eclipse.plugin.editor.entity.partitions.EntityPartitionTypes;
 import org.telosys.eclipse.plugin.editor.entity.presentation.scanners.EntityScannerForDefaultPartition;
 import org.telosys.eclipse.plugin.editor.entity.presentation.scanners.EntityScannerForFieldBodyPartition;
 import org.telosys.eclipse.plugin.editor.entity.syntax.EntityNames;
+import org.telosys.eclipse.plugin.editor.entity.syntax.WordProvider;
 
 public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 	
-	private final File   entityFile ;
 	private final File   modelFolder ;
 	private final String currentEntityName ;
-//    private final EntityScannerForDefaultPartition   defaultPartitionScanner   ; //= new EntityScannerForDefaultPartition();
-//    private final EntityScannerForFieldBodyPartition fieldBodyPartitionScanner ; //= new EntityScannerForFieldBodyPartition();
+	private final WordProvider entityNamesProvider;
 	
 	public EntitySourceViewerConfiguration(File file) {
 		super();
-		this.entityFile = file; // can be null if error in caller (not supposed to happen)
 		this.currentEntityName = EntityNames.getEntityName(file);
 		this.modelFolder = file.getParentFile();
-//		this.defaultPartitionScanner   = new EntityScannerForDefaultPartition();
-//		this.fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition();
+		this.entityNamesProvider = new WordProvider(modelFolder);
 	} 
-
-//    private IContentAssistProcessor contentAssistProcessor;
-//    
-//    public EntitySourceViewerConfiguration() {
-//        this.contentAssistProcessor = new MyCompletionProcessor();
-//    }
-    
-//    @Override
-//    public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
-//        
-//        // Use Entity scanner 
-//        ITokenScanner scanner = new EntityScanner();
-//        
-//        // DefaultDamagerRepairer : implements IPresentationDamager, IPresentationRepairer 
-//        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
-//
-//        
-//        PresentationReconciler reconciler = new PresentationReconciler();
-//        reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
-//        reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
-//
-//        return reconciler;
-//    }
-	
    
     // Returns all configured content types for the given source viewer. 
     // This list tells the caller which content types must be configured for the given sourceviewer, 
@@ -66,6 +39,7 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
 		return EntityPartitionTypes.ALL_TYPES;
 	}
 	
+	// SYNTAX HIGHLIGHTING 
     @Override
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
         PresentationReconciler reconciler = new PresentationReconciler();
@@ -89,8 +63,7 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
         reconciler.setRepairer(defaultRepairer, IDocument.DEFAULT_CONTENT_TYPE);
 
         // Configure syntax highlighting for FIELD_BODY partition
-        // TODO: File
-        EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition(modelFolder);
+        EntityScannerForFieldBodyPartition fieldBodyPartitionScanner = new EntityScannerForFieldBodyPartition(entityNamesProvider);
         DefaultDamagerRepairer bodyRepairer = new DefaultDamagerRepairer(fieldBodyPartitionScanner);
         reconciler.setDamager(bodyRepairer,  EntityPartitionTypes.FIELD_BODY);
         reconciler.setRepairer(bodyRepairer, EntityPartitionTypes.FIELD_BODY);
@@ -99,15 +72,20 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
     }
     
     
+	// CONTENT ASSISTANT (SUGGESTIONS FOR COMPLETION)
     @Override
     public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
         ContentAssistant assistant = new ContentAssistant();
-        //assistant.setContentAssistProcessor(new MyCompletionProcessor_BAK(), IDocument.DEFAULT_CONTENT_TYPE);
         
-        // Registers a given content assist processor for a particular content type. If there is already
-        // a processor registered for this type, the new processor is registered instead of the old one.
+        // Define a "content assist processor" for a particular content type. 
+        // If there is already a processor registered for this type, 
+        // the new processor is registered instead of the old one.
+
+        // Define CONTENT ASSISTANT for DEFAULT partition
         assistant.setContentAssistProcessor(new EntityContentAssistForDefaultPartition(),   IDocument.DEFAULT_CONTENT_TYPE);
-        assistant.setContentAssistProcessor(new EntityContentAssistForFieldBodyPartition(), EntityPartitionTypes.FIELD_BODY);
+
+        // Define CONTENT ASSISTANT for FIELD_BODY partition
+        assistant.setContentAssistProcessor(new EntityContentAssistForFieldBodyPartition(entityNamesProvider), EntityPartitionTypes.FIELD_BODY);
 
         assistant.enableAutoActivation(true);
         assistant.setAutoActivationDelay(300); // Auto-trigger after 300ms
@@ -115,8 +93,4 @@ public class EntitySourceViewerConfiguration extends SourceViewerConfiguration {
         return assistant;
     }
     
-//    @Override
-//    public IContentAssistant getContentAssistProcessor(ISourceViewer sourceViewer) {
-//        return contentAssistProcessor;
-//    }
 }

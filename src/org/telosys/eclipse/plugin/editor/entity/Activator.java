@@ -31,7 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		CustomRootLogger.setup(PLUGIN_ID, Level.ALL, new EclipseConsoleAsLoggerHandler("Telosys logger: entity editor") );	
+		CustomRootLogger.setup(PLUGIN_ID, PluginLoggerLevel.LEVEL, new EclipseConsoleAsLoggerHandler("Telosys logger: entity editor") );	
 	}
 
 	@Override

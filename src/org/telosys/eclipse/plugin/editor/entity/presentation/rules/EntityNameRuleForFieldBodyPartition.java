@@ -4,7 +4,7 @@ import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.IWordDetector;
 import org.telosys.eclipse.plugin.editor.entity.presentation.rules.tools.DynamicWordRule;
-import org.telosys.eclipse.plugin.editor.entity.presentation.rules.tools.WordProvider;
+import org.telosys.eclipse.plugin.editor.entity.syntax.WordProvider;
 
 public class EntityNameRuleForFieldBodyPartition {
 	

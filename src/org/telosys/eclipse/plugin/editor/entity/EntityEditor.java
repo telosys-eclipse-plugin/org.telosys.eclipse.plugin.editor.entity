@@ -35,25 +35,6 @@ public class EntityEditor extends TextEditor {
 		LOGGER.fine(" -- CONSTRUCTOR : getEditorInput() -> " + getEditorInput() );
 	}
 	
-//    private File getFile() {
-//        IEditorInput editorInput = getEditorInput();
-//        if (editorInput instanceof FileEditorInput) {
-//            return ((IFileEditorInput) editorInput).getFile();
-//        }
-//        // Adapt the input to an IFile
-//        IFile file = input.getAdapter(IFile.class);
-//
-//        if (file != null) {
-//            IPath location = file.getLocation(); // Get absolute path
-//
-//            if (location != null) {
-//                return location.toFile(); // Convert to java.io.File
-//            }
-//        }
-//        return null;
-//    }
-//    }
-	
     @Override
     protected void initializeEditor() {
 		LOGGER.fine(" -- #0 initializeEditor() ");
@@ -86,10 +67,6 @@ public class EntityEditor extends TextEditor {
 		else {
 			DialogBox.showError("IEditorInput is not instance of FileEditorInput");
 		}
-		// org.eclipse.ui.part.FileEditorInput
-		
-		
-		//setDocumentProvider(new EntityDocumentProvider());
 
 		setSourceViewerConfiguration(new EntitySourceViewerConfiguration(file));
 		
@@ -110,11 +87,6 @@ public class EntityEditor extends TextEditor {
 	    StyledText textWidget = getSourceViewer().getTextWidget();
 	    
 	    // Add the auto-closing character listener
-	    // TODO
 	    textWidget.addVerifyKeyListener(new AutoCloseCharacterListener());
 	}
-
-
-
-
 }

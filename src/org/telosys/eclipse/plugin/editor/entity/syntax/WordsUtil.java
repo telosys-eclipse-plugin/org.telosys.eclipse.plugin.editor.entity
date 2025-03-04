@@ -32,4 +32,9 @@ public class WordsUtil {
                      .toArray(String[]::new);
     }
 
+    public static String[] concat(String[] array1, Set<String> set ) {
+        return Stream.concat(Arrays.stream(array1), set.stream())
+                     .toArray(String[]::new);
+    }
+
 }

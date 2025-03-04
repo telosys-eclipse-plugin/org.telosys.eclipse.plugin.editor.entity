@@ -1,9 +1,7 @@
-package org.telosys.eclipse.plugin.editor.entity.presentation.rules.tools;
+package org.telosys.eclipse.plugin.editor.entity.syntax;
 
 import java.io.File;
 import java.util.Set;
-
-import org.telosys.eclipse.plugin.editor.entity.syntax.EntityNames;
 
 public class WordProvider {
 
@@ -24,5 +22,9 @@ public class WordProvider {
 	
 	public Set<String> getWords() {
 		return words;
+	}
+
+	public String[] getWordsArrays() {
+		return words.toArray(new String[0]);
 	}
 }

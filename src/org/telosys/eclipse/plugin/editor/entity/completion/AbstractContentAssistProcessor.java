@@ -19,7 +19,7 @@ public abstract class AbstractContentAssistProcessor implements IContentAssistPr
 
 	protected abstract String[] getProposalsForPrefix(String prefix);
 	
-	protected abstract String[] getProposalsForPreviousChar(char previousChar);
+	protected abstract String[] getProposalsForPreviousNonBlankChar(char previousChar);
 	
     @Override
     public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
@@ -39,7 +39,7 @@ public abstract class AbstractContentAssistProcessor implements IContentAssistPr
             else {
             	char previousChar = getPreviousNonBlankChar(document, offset);
             	if ( previousChar != '\0' ) {
-            		String[] allProposals = getProposalsForPreviousChar(previousChar);
+            		String[] allProposals = getProposalsForPreviousNonBlankChar(previousChar);
                 	if ( allProposals != null ) {
                     	return selectProposals(offset, prefix, allProposals) ;
                 	}

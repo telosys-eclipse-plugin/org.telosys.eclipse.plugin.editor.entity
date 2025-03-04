@@ -1,4 +1,4 @@
-package org.telosys.eclipse.plugin.editor.entity.entity.syntax;
+package org.telosys.eclipse.plugin.editor.entity.syntax;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.telosys.eclipse.plugin.editor.entity.syntax.EntityNames;
 
 class EntityNameTest {
 
